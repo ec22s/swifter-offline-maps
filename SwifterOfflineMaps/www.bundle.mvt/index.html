@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title></title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <link rel="stylesheet" type="text/css" href="css/maplibre-gl.css" />
+    <link rel="stylesheet" type="text/css" href="css/maplibre-gl-inspect.css" />
+    <script src="js/maplibre-gl.js"></script>
+    <script src="js/maplibre-gl-inspect.js"></script>
+    <style>
+      body { margin:0; padding:0; }
+      #map { position:absolute; top:0; bottom:0; left:0; width:calc(50% - 2px); }
+      #map-online { position:absolute; top:0; bottom:0; left:calc(50% + 2px); right:0; }
+    </style>
+  </head>
+  <body>
+    <div id='map'></div>
+    <div id='map-online'></div>
+    <script>
+      const mapMain = rendarMap('map');
+      const mapOnline = rendarMap('map-online', false);
+      mapMain.on('zoomend', () => {
+        mapOnline.setZoom(mapMain.getZoom());
+        syncGlobalState(mapMain, mapOnline);
+      });
+      mapMain.on('moveend', () => {
+        mapOnline.setCenter(mapMain.getCenter());
+        syncGlobalState(mapMain, mapOnline);
+      });
+      
+      function syncGlobalState(from, to) {
+        const state = from.getGlobalState();
+        console.log(state);
+        // TODO
+        // to.setGlobalStateProperty(prop, value);
+      }
+      
+      function rendarMap(mapDocId, first = true) {
+        if (first) {
+          maplibregl.setRTLTextPlugin('js/mapbox-gl-rtl-text.js', true);
+        }
+        var map = new maplibregl.Map({
+          container: mapDocId,
+          style: first
+          ? 'http://localhost/styles/basic-preview-style.json'
+          : 'http://localhost/styles/osm-online-style.json',
+          hash: true,
+          maxPitch: 85,
+          center: [130,33],
+          zoom: 1
+        });
+        map.touchPitch.disable();
+        map.dragRotate.disable();
+        map.touchZoomRotate.disable();
+        
+        if (!first) {
+          return map;
+        }
+        map.addControl(new maplibregl.GlobeControl());
+        map.addControl(new maplibregl.NavigationControl({
+          visualizePitch: false,
+          showZoom: true,
+          showCompass: false
+        }));
+        return map;
+      }
+    </script>
+  </body>
+</html>
