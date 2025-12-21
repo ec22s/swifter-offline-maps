@@ -12,7 +12,7 @@
  
   - 当日流したデモ動画は次項に切り出し
 
-  https://github.com/user-attachments/assets/c5fc2abc-f7c9-49d7-bcfa-a79cec40f94d
+  https://github.com/user-attachments/assets/2f263d6a-211a-4388-87e7-a8aa740432e5
 
 <br>
 
